@@ -1,15 +1,11 @@
+Based on your instruction, I would do the following:
+
+Firstly, I'll break things down in a component-based manner, ensuring each component is self-contained and reusable. Our Navbar could become more extensible if we extracted NavLink as a separate, reusable component:
+
 ```javascript
 import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
-
-const NavbarContainer = styled.nav`
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background-color: ${({ theme }) => theme.colors.primary};
-`;
 
 const NavLink = styled.a`
   color: ${({ theme }) => theme.colors.secondary};
@@ -21,35 +17,47 @@ const NavLink = styled.a`
   }
 `;
 
+const NavLinkComponent = ({href, children}) => (
+    <Link href={href} passHref>
+        <NavLink>{children}</NavLink>
+    </Link>
+);
+
+export default NavLinkComponent;
+```
+
+Then, the import in our Navbar component changes to:
+
+```javascript
+import NavLink from './NavLink';
+```
+
+Now, NavBar component appears cleaner and maintainable:
+
+```javascript
 const Navbar = () => {
   const router = useRouter();
 
   return (
     <NavbarContainer>
-      <Link href="/" passHref>
-        <NavLink>Home</NavLink>
-      </Link>
-      <Link href="/overview" passHref>
-        <NavLink>Overview</NavLink>
-      </Link>
-      <Link href="/products" passHref>
-        <NavLink>Products</NavLink>
-      </Link>
-      <Link href="/services" passHref>
-        <NavLink>Services</NavLink>
-      </Link>
-      <Link href="/values" passHref>
-        <NavLink>Values</NavLink>
-      </Link>
-      <Link href="/communication" passHref>
-        <NavLink>Communication</NavLink>
-      </Link>
-      <Link href="/contact" passHref>
-        <NavLink>Contact</NavLink>
-      </Link>
+      <NavLink href="/" >Home</NavLink>
+      <NavLink href="/overview" >Overview</NavLink>
+      <NavLink href="/products" >Products</NavLink>
+      <NavLink href="/services" >Services</NavLink>
+      <NavLink href="/values" >Values</NavLink>
+      <NavLink href="/communication" >Communication</NavLink>
+      <NavLink href="/contact" >Contact</NavLink>
     </NavbarContainer>
   );
 };
-
-export default Navbar;
 ```
+
+And our NavLink component can be used elsewhere in our codebase.
+
+Then, to handle high complexity, consider using the SOLID principles, test-driven development, consistent code style (perhaps with a linter), and comprehensive documentation. 
+
+Moreover, respect the DRY principle (Don't Repeat Yourself) to avoid unnecessary repetitions, which could simplify the codebase and reduce possibility of errors. 
+
+Lastly, for complex asynchronous behavior, Redux along with redux-saga or redux-thunk can be used for a predictable state container and handling side-effects.
+
+Be ready to refactor regularly to ensure that as your project grows, it remains maintainable and easy to understand. And remember, always design for scalability and future use cases. Happy coding!
